@@ -78,11 +78,13 @@ app.post('/webhook', (req, res) => {
             for(var place in resultJson){
 
                 answer += place +". " +resultJson[place].name + " (" + resultJson[place].rating+ "*) "
-                answer += resultJson[place].vicinity
+                answer += resultJson[place].vicinity + "\n"
+                /*
                 if(resultJson[place].photos != null)
                 {
                     answer += " " + resultJson[place].photos[0].html_attributions +"\n"
                 }
+                */
             }
 
             reply(reply_token, answer)
