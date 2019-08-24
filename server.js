@@ -80,7 +80,7 @@ app.post('/webhook', (req, res) => {
                 answer += resultJson[place].vicinity
                 if(resultJson[place].photos != null)
                 {
-                    answer += " " + resultJson[place].photos[0].html_attributions
+                    answer += " " + resultJson[place].photos[0].html_attributions +"\n"
                 }
             }
 
