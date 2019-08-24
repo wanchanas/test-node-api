@@ -3,13 +3,17 @@ const app = express()
 const bodyParser = require('body-parser')
 const request = require('request')
 const logs = require('./log')
+const AIMLParser = require('aimlparser')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3000
 const places = require("google-places-web").default; // instance of GooglePlaces Class;
- 
+const aimlParser = new AIMLParser({ name:'bobebot' })
+
+aimlParser.load(['./test-aiml.xml'])
+
 // Setup
 places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
 places.debug = false; // boolean;
@@ -48,12 +52,18 @@ app.get('/restaurant/bangsue', (req, res) => {
 //https://bobe-line-bot.herokuapp.com/webhook
 //For line message api
 app.post('/webhook', (req, res) => {
+
     let reply_token = req.body.events[0].replyToken
+    let msg = req.body.events[0].message.text
+
     var log = {"log": 'reply_token = ' + reply_token}
     logs.push(JSON.parse(JSON.stringify(log)))
 
-    reply(reply_token)
+    aimlParser.getResult(msg, (answer, wildCardArray, input) => {
+        reply(reply_token, answer)
+    })
     res.sendStatus(200)
+
 })
 
 //start sever
@@ -61,22 +71,21 @@ app.listen(port, () => {
     console.log('Start server at port '+port+'.')
 })
 
-function reply(reply_token) {
+function reply(reply_token, msg) {
+
     let headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer rx+8yxCgh0eqm1yRd+SV+KJZiIImGqimXj4ybTTnxuOSwGSGXIK8y08PKo5lDh80ns6NG99eU91CDEVNjCcl0Sd9rLE9edz0x2Odtk1i9AtvdS5TksLYf3wfBCD73l36GhoGC4QYDk0iTiT6yotXRgdB04t89/1O/w1cDnyilFU='
     }
+
     let body = JSON.stringify({
         replyToken: reply_token,
         messages: [{
             type: 'text',
-            text: 'Hello'
-        },
-        {
-            type: 'text',
-            text: 'How are you?'
+            text: msg
         }]
     })
+    
     request.post({
         url: 'https://api.line.me/v2/bot/message/reply',
         headers: headers,
