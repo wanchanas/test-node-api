@@ -31,7 +31,7 @@ app.get('/restaurant/bangsue', (req, res) => {
     places.nearbysearch({
         location: "13.828025,100.528100", // LatLon delimited by,
         radius: "3000",  // Radius cannot be used if rankBy set to DISTANCE
-        type: ["restaurant", "food"], // Undefined type will return all types
+        type: ["restaurant", "food"] // Undefined type will return all types
         //rankby: "distance" // See google docs for different possible values
       })
         .then(result => {
@@ -77,8 +77,9 @@ app.post('/webhook', (req, res) => {
             var answer = ""
             for(var place in resultJson){
 
-                answer += place +". " +resultJson[place].name + " (" + resultJson[place].rating+ "*) "
+                answer += String(parseInt(place)+1) +". " +resultJson[place].name + " (" + resultJson[place].rating+ "*) "
                 answer += resultJson[place].vicinity + "\n"
+
                 /*
                 if(resultJson[place].photos != null)
                 {
