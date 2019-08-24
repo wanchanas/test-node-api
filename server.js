@@ -42,8 +42,8 @@ app.get('/restaurant/bangsue', (req, res) => {
 //https://bobe-line-bot.herokuapp.com/webhook
 //For line message api
 app.post('/webhook', (req, res) => {
-    //let reply_token = req.body.events[0].replyToken
-    //reply(reply_token)
+    let reply_token = req.body.events[0].replyToken
+    reply(reply_token)
     res.sendStatus(200)
 })
 
