@@ -11,8 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const port = process.env.PORT || 3000
 const places = require("google-places-web").default; // instance of GooglePlaces Class;
 
-// Setup
-places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
+// Setup"
+places.apiKey = "AIzaSyD7Gx9KOZ5p-NANXqNbid4WqR1g1X18flE";
+//places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
 places.debug = false; // boolean;
 
 app.get('/', (req, res) => {
