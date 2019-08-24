@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const request = require('request')
 const logs = require('./log')
+var moment = require('moment');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -14,9 +15,8 @@ const places = require("google-places-web").default; // instance of GooglePlaces
 places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
 places.debug = false; // boolean;
 
-
 app.get('/', (req, res) => {
-    res.status(200).send("Hello")
+    res.status(200).send("SCG")
 })
 
 app.get('/logs', (req, res) => {
@@ -31,10 +31,10 @@ app.get('/restaurant/bangsue', (req, res) => {
         location: "13.828025,100.528100", // LatLon delimited by,
         radius: "3000",  // Radius cannot be used if rankBy set to DISTANCE
         type: ["restaurant", "food"], // Undefined type will return all types
-        keyword: "ส้มตำ"
         //rankby: "distance" // See google docs for different possible values
       })
         .then(result => {
+
             // result object
             resultJson = JSON.parse(JSON.stringify(result));
             
@@ -53,7 +53,7 @@ app.post('/webhook', (req, res) => {
     let reply_token = req.body.events[0].replyToken
     let msg = req.body.events[0].message.text
 
-    var log = {"log": 'reply_token = ' + reply_token + " msg = " + msg}
+    var log = {"log": moment().format('Y-M-D H:m:s') +": reply_token = " + reply_token + " msg = " + msg}
     logs.push(JSON.parse(JSON.stringify(log)))
 
     var resultJson = {}
@@ -101,7 +101,7 @@ app.listen(port, () => {
 
 function reply(reply_token, msg) {
 
-    logs.push(JSON.parse(JSON.stringify({"log": 'answer = ' + msg})))
+    logs.push(JSON.parse(JSON.stringify({"log": moment().format('Y-M-D H:m:s') + 'answer = ' + msg})))
 
     let headers = {
         'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ function reply(reply_token, msg) {
         body: body
     }, (err, res, body) => {
         
-        var log = {"log": 'status = ' + res.statusCode}
+        var log = {"log": moment().format('Y-M-D H:m:s')+'status = ' + res.statusCode}
         logs.push(JSON.parse(JSON.stringify(log)))
 
         console.log('status = ' + res.statusCode);
