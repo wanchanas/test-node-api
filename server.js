@@ -56,7 +56,7 @@ app.post('/webhook', (req, res) => {
     let reply_token = req.body.events[0].replyToken
     let msg = req.body.events[0].message.text
 
-    var log = {"log": 'reply_token = ' + reply_token}
+    var log = {"log": 'reply_token = ' + reply_token + " msg = " + msg}
     logs.push(JSON.parse(JSON.stringify(log)))
 
     aimlParser.getResult(msg, (answer, wildCardArray, input) => {
@@ -74,7 +74,7 @@ app.listen(port, () => {
 
 function reply(reply_token, msg) {
 
-    logs.push(JSON.parse(JSON.stringify({"log": 'msg = ' + msg})))
+    logs.push(JSON.parse(JSON.stringify({"log": 'answer = ' + msg})))
 
     let headers = {
         'Content-Type': 'application/json',
