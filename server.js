@@ -3,16 +3,12 @@ const app = express()
 const bodyParser = require('body-parser')
 const request = require('request')
 const logs = require('./log')
-const AIMLParser = require('aimlparser')
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3000
 const places = require("google-places-web").default; // instance of GooglePlaces Class;
-const aimlParser = new AIMLParser({ name:'HelloBot' })
-
-aimlParser.load(['./test-aiml.xml'])
 
 // Setup
 places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
