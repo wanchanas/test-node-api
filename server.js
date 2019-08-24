@@ -3,16 +3,16 @@ const app = express()
 const bodyParser = require('body-parser')
 const request = require('request')
 const logs = require('./log')
-const AIMLParser = require('aimlparser')
+const AIMLInterpreter = require('aimlinterpreter')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 const port = process.env.PORT || 3000
 const places = require("google-places-web").default; // instance of GooglePlaces Class;
-const aimlParser = new AIMLParser({ name:'HelloBot' })
+const aimlInterpreter = new AIMLInterpreter({ name:'HelloBot'})
 
-aimlParser.load(['./test-aiml.xml'])
+aimlInterpreter.loadAIMLFilesIntoArray(['./test-aiml.xml'])
 
 // Setup
 places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
@@ -59,12 +59,12 @@ app.post('/webhook', (req, res) => {
     var log = {"log": 'reply_token = ' + reply_token + " msg = " + msg}
     logs.push(JSON.parse(JSON.stringify(log)))
 
-    aimlParser.getResult(msg, (answer, wildCardArray, input) => {
+    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
         reply(reply_token, answer)
     })
 
     res.sendStatus(200)
-    
+
 })
 
 //start sever
