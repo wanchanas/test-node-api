@@ -74,9 +74,10 @@ app.post('/webhook', (req, res) => {
                 return parseFloat(b.rating) - parseFloat(a.rating);
             });
 
+            var answer = ""
             for(var place in resultJson){
 
-                var answer = resultJson[place].name + " [*" + resultJson[place].rating+ "*] "
+                answer = place +".: " +resultJson[place].name + " [*" + resultJson[place].rating+ "*] "
                 answer += resultJson[place].vicinity
                 if(resultJson[place].photos != null)
                 {
