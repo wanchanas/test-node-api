@@ -62,6 +62,7 @@ app.post('/webhook', (req, res) => {
     aimlParser.getResult(msg, (answer, wildCardArray, input) => {
         reply(reply_token, answer)
     })
+
     res.sendStatus(200)
 
 })
@@ -73,9 +74,11 @@ app.listen(port, () => {
 
 function reply(reply_token, msg) {
 
+    logs.push(JSON.parse(JSON.stringify({"log": 'msg = ' + msg})))
+
     let headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer rx+8yxCgh0eqm1yRd+SV+KJZiIImGqimXj4ybTTnxuOSwGSGXIK8y08PKo5lDh80ns6NG99eU91CDEVNjCcl0Sd9rLE9edz0x2Odtk1i9AtvdS5TksLYf3wfBCD73l36GhoGC4QYDk0iTiT6yotXRgdB04t89/1O/w1cDnyilFU='
+        'Authorization': 'Bearer Bearer rx+8yxCgh0eqm1yRd+SV+KJZiIImGqimXj4ybTTnxuOSwGSGXIK8y08PKo5lDh80ns6NG99eU91CDEVNjCcl0Sd9rLE9edz0x2Odtk1i9AtvdS5TksLYf3wfBCD73l36GhoGC4QYDk0iTiT6yotXRgdB04t89/1O/w1cDnyilFU='
     }
 
     let body = JSON.stringify({
@@ -85,7 +88,7 @@ function reply(reply_token, msg) {
             text: msg
         }]
     })
-    
+
     request.post({
         url: 'https://api.line.me/v2/bot/message/reply',
         headers: headers,
