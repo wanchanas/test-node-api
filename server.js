@@ -3,16 +3,16 @@ const app = express()
 const bodyParser = require('body-parser')
 const request = require('request')
 const logs = require('./log')
-const AIMLInterpreter = require('aimlinterpreter')
+const AIMLParser = require('aimlparser')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 const port = process.env.PORT || 3000
 const places = require("google-places-web").default; // instance of GooglePlaces Class;
-const aimlInterpreter = new AIMLInterpreter({ name:'HelloBot'})
+const aimlParser = new AIMLParser({ name:'HelloBot' })
 
-aimlInterpreter.loadAIMLFilesIntoArray(['./test-aiml.xml'])
+aimlParser.load(['./test-aiml.xml'])
 
 // Setup
 places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
@@ -20,7 +20,9 @@ places.debug = false; // boolean;
 
 
 app.get('/', (req, res) => {
-  res.send('Hello')
+    aimlParser.getResult("HELLO", (answer, wildCardArray, input) => {
+        res.send("answer= "+answer)
+    })
 })
 
 app.get('/logs', (req, res) => {
@@ -59,13 +61,11 @@ app.post('/webhook', (req, res) => {
     var log = {"log": 'reply_token = ' + reply_token + " msg = " + msg}
     logs.push(JSON.parse(JSON.stringify(log)))
 
-    aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
-        logs.push(JSON.parse(JSON.stringify({"log": "msg" + msg + "answer = " + answer + " wildCardArray = " + wildCardArray +" input = "+input})))
+    aimlParser.getResult(msg, (answer, wildCardArray, input) => {
         reply(reply_token, answer)
     })
 
     res.sendStatus(200)
-
 })
 
 //start sever
