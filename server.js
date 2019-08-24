@@ -60,6 +60,7 @@ app.post('/webhook', (req, res) => {
     logs.push(JSON.parse(JSON.stringify(log)))
 
     aimlInterpreter.findAnswerInLoadedAIMLFiles(msg, (answer, wildCardArray, input) => {
+        logs.push(JSON.parse(JSON.stringify({"log": "msg" + msg + "answer = " + answer + " wildCardArray = " + wildCardArray +" input = "+input})))
         reply(reply_token, answer)
     })
 
