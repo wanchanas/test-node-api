@@ -53,7 +53,7 @@ app.post('/webhook', (req, res) => {
     let reply_token = req.body.events[0].replyToken
     let msg = req.body.events[0].message.text
 
-    var log = {"log": moment().format('Y-M-D H:m:s') +": reply_token = " + reply_token + " msg = " + msg}
+    var log = {"log": moment().add(7, 'hours').format('Y-M-D H:m:s') +": reply_token = " + reply_token + " msg = " + msg}
     logs.push(JSON.parse(JSON.stringify(log)))
 
     var resultJson = {}
@@ -101,7 +101,7 @@ app.listen(port, () => {
 
 function reply(reply_token, msg) {
 
-    logs.push(JSON.parse(JSON.stringify({"log": moment().format('Y-M-D H:m:s') + 'answer = ' + msg})))
+    logs.push(JSON.parse(JSON.stringify({"log": moment().add(7, 'hours').format('Y-M-D H:m:s') + ': answer = ' + msg})))
 
     let headers = {
         'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ function reply(reply_token, msg) {
         body: body
     }, (err, res, body) => {
         
-        var log = {"log": moment().format('Y-M-D H:m:s')+'status = ' + res.statusCode}
+        var log = {"log": moment().add(7, 'hours').format('Y-M-D H:m:s')+': status = ' + res.statusCode}
         logs.push(JSON.parse(JSON.stringify(log)))
 
         console.log('status = ' + res.statusCode);
