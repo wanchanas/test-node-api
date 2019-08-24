@@ -4,19 +4,16 @@
         <pattern>ดีจ้า</pattern>
         <template>สวัสดี</template>
     </category>
-
     <category>
         <pattern>HELLO</pattern>
         <template>Hello!</template>
     </category>
-
     <category>
         <pattern>WHO ARE YOU</pattern>
         <template>I am HelloBot</template>
     </category>
-    
     <category>
         <pattern>I LIKE *</pattern>
-        <template>I like <star/> too.</template>
+        <template>I like <star /> too.</template>
     </category>
 </aiml>
