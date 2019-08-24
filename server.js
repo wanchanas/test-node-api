@@ -86,7 +86,7 @@ app.post('/webhook', (req, res) => {
             reply(reply_token, answer)
         })
         .catch(e => {
-            reply(reply_token, e)
+            reply(reply_token, JSON.stringify(e))
             console.log(e)
         });
 
