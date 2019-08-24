@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const request = require('request')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -23,7 +24,7 @@ app.get('/restaurant/bangsue', (req, res) => {
 
     places.nearbysearch({
         location: "13.828025,100.528100", // LatLon delimited by,
-        radius: "3",  // Radius cannot be used if rankBy set to DISTANCE
+        radius: "3000",  // Radius cannot be used if rankBy set to DISTANCE
         type: ["restaurant"], // Undefined type will return all types
         //rankby: "distance" // See google docs for different possible values
       })
