@@ -20,9 +20,7 @@ places.debug = false; // boolean;
 
 
 app.get('/', (req, res) => {
-    aimlParser.getResult("HELLO", (answer, wildCardArray, input) => {
-        res.send("answer= "+answer)
-    })
+    res.status(200).send("Hello")
 })
 
 app.get('/logs', (req, res) => {
@@ -36,7 +34,8 @@ app.get('/restaurant/bangsue', (req, res) => {
     places.nearbysearch({
         location: "13.828025,100.528100", // LatLon delimited by,
         radius: "3000",  // Radius cannot be used if rankBy set to DISTANCE
-        type: ["restaurant"], // Undefined type will return all types
+        type: ["restaurant", "food"], // Undefined type will return all types
+        keyword: "ส้มตำ"
         //rankby: "distance" // See google docs for different possible values
       })
         .then(result => {
@@ -61,9 +60,39 @@ app.post('/webhook', (req, res) => {
     var log = {"log": 'reply_token = ' + reply_token + " msg = " + msg}
     logs.push(JSON.parse(JSON.stringify(log)))
 
-    aimlParser.getResult(msg, (answer, wildCardArray, input) => {
-        reply(reply_token, answer)
-    })
+    var resultJson = {}
+
+    places.nearbysearch({
+        location: "13.828025,100.528100", // LatLon delimited by,
+        radius: "3000",  // Radius cannot be used if rankBy set to DISTANCE
+        type: ["restaurant", "food"], // Undefined type will return all types
+        keyword: msg
+        //rankby: "distance" // See google docs for different possible values
+      })
+        .then(result => {
+            // result object
+            resultJson = JSON.parse(JSON.stringify(result));
+
+            resultJson = resultJson.sort(function(a, b) {
+                return parseFloat(b.rating) - parseFloat(a.rating);
+            });
+
+            for(var place in resultJson){
+
+                var answer = resultJson[place].name + " [*" + resultJson[place].rating+ "*] "
+                answer += resultJson[place].vicinity
+                if(resultJson[place].photos != null)
+                {
+                    answer += " " + resultJson[place].photos[0].html_attributions
+                }
+            }
+
+            reply(reply_token, answer)
+        })
+        .catch(e => {
+            reply(reply_token, e)
+            console.log(e)
+        });
 
     res.sendStatus(200)
 })
@@ -102,4 +131,3 @@ function reply(reply_token, msg) {
         console.log('status = ' + res.statusCode);
     });
 }
-
