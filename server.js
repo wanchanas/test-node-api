@@ -6,11 +6,11 @@ const logs = require('./log')
 const AIMLParser = require('aimlparser')
 
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: false }))
 
 const port = process.env.PORT || 3000
 const places = require("google-places-web").default; // instance of GooglePlaces Class;
-const aimlParser = new AIMLParser({ name:'bobebot' })
+const aimlParser = new AIMLParser({ name:'HelloBot' })
 
 aimlParser.load(['./test-aiml.xml'])
 
@@ -78,7 +78,7 @@ function reply(reply_token, msg) {
 
     let headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer Bearer rx+8yxCgh0eqm1yRd+SV+KJZiIImGqimXj4ybTTnxuOSwGSGXIK8y08PKo5lDh80ns6NG99eU91CDEVNjCcl0Sd9rLE9edz0x2Odtk1i9AtvdS5TksLYf3wfBCD73l36GhoGC4QYDk0iTiT6yotXRgdB04t89/1O/w1cDnyilFU='
+        'Authorization': 'Bearer rx+8yxCgh0eqm1yRd+SV+KJZiIImGqimXj4ybTTnxuOSwGSGXIK8y08PKo5lDh80ns6NG99eU91CDEVNjCcl0Sd9rLE9edz0x2Odtk1i9AtvdS5TksLYf3wfBCD73l36GhoGC4QYDk0iTiT6yotXRgdB04t89/1O/w1cDnyilFU='
     }
 
     let body = JSON.stringify({
