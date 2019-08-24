@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const request = require('request')
+const logs = require('./log')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -16,6 +17,10 @@ places.debug = false; // boolean;
 
 app.get('/', (req, res) => {
   res.send('Hello')
+})
+
+app.get('/logs', (req, res) => {
+    res.status(200).json(logs)
 })
 
 app.get('/restaurant/bangsue', (req, res) => {
@@ -74,6 +79,10 @@ function reply(reply_token) {
         headers: headers,
         body: body
     }, (err, res, body) => {
+        
+        var log = {"log": 'status = ' + res.statusCode}
+        logs.push(JSON.parse(JSON.stringify(log)))
+
         console.log('status = ' + res.statusCode);
     });
 }
