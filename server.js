@@ -159,13 +159,6 @@ app.post('/webhook', (req, res) => {
 
                 answer += String(parseInt(place)+1) +". " +resultJson[place].name + " (" + resultJson[place].rating+ "*) "
                 answer += resultJson[place].vicinity + "\n"
-
-                /*
-                if(resultJson[place].photos != null)
-                {
-                    answer += " " + resultJson[place].photos[0].html_attributions +"\n"
-                }
-                */
             }
 
             reply(reply_token, answer)
