@@ -11,14 +11,94 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const port = process.env.PORT || 3000
 const places = require("google-places-web").default; // instance of GooglePlaces Class;
 
-// Setup"
-places.apiKey = "AIzaSyD7Gx9KOZ5p-NANXqNbid4WqR1g1X18flE";
-//places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg";
+// Setup
+places.apiKey = "AIzaSyD7Gx9KOZ5p-NANXqNbid4WqR1g1X18flE"; //for heroku
+//places.apiKey = "AIzaSyDqzWLn5dOhOIhzZN2kz-jePA0HM1vV-Sg"; //for localhost
 places.debug = false; // boolean;
 
 app.get('/', (req, res) => {
     res.status(200).send("SCG")
 })
+
+app.get('/xyz', (req, res) => {
+
+    var resultMsg = "Please find x,y,z in [x, 5, 9, 15, 23, y, z]\n----------------------\n"
+    var isCompleted = false
+    var diff = 0
+
+    var listNumbers = [5, 9, 15, 23]
+    var findNumbers = []
+    var diffNumbers = []
+
+    while(!isCompleted)
+    {
+        if(diffNumbers.length == 0)
+        {
+            diffNumbers = listNumbers
+        }
+
+        diffNumbers = findDiff(diffNumbers);
+        if(diffNumbers.length <= 1 || (Math.abs(diffNumbers[0] - diffNumbers[1]) == 0 ))
+        {
+            diff = diffNumbers[0]
+            isCompleted = true
+        }else{
+            findNumbers = diffNumbers
+        }
+    }
+
+    resultMsg += "Different in variation number is : "+ diff + "\n"
+
+    for(var i = 0; i < 1; i ++)
+    {
+        findNumbers.unshift(findNumbers[0] - diff)
+        var prevNum = listNumbers[0] - findNumbers[0]
+        
+        //Add prev number
+        listNumbers.unshift(prevNum)
+    }
+
+    for( var i = 0; i < 2; i++)
+    {
+        findNumbers.push(findNumbers[findNumbers.length - 1 ] + diff)
+        var nextNum = findNumbers[findNumbers.length - 1] + listNumbers[listNumbers.length -1]
+        
+        //Add next number
+        listNumbers.push(nextNum)
+    }
+
+    resultMsg += "Variation numbers is : " + findNumbers.join(",") + "\n"
+    resultMsg += "Result of numbers is : " + listNumbers.join(",") + "\n"
+
+    res.status(200).send(resultMsg)
+})
+
+function findDiff(numbers)
+{
+    var diffs = []
+    for(var i = 0; i < numbers.length; i++)
+    {
+        try {
+            
+            var a = numbers[i]
+            var b = numbers[i+1]
+
+            var diff = Math.abs( a - b )
+
+            if(!Number.isNaN(diff))
+            {
+                diffs.push(diff)
+                console.log(diff)
+            }
+
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+
+    return diffs;
+}
+
 
 app.get('/logs', (req, res) => {
     res.status(200).json(logs)
