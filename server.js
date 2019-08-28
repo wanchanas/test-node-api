@@ -243,11 +243,12 @@ function initReplyMessage(placeResults)
         if(placeResults[place].photos != null && placeResults[place].photos.length > 0)
         {
             var photo = "https://maps.googleapis.com/maps/api/place/photo?maxwidth="+maxwidth+"&photoreference="+placeResults[place].photos[0].photo_reference+"&key="+places.apiKey
+            photo = "https://static.bkkmenu.com/files/2018/02/Crostini-9-1005x670.jpg";
             content.hero.url = photo;
         }
 
         content.hero.action.label = ""
-        content.hero.action.uri = "https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"";
+        content.hero.action.uri = encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"");
         
         //Rating
         var rating = {
@@ -345,7 +346,7 @@ function initReplyMessage(placeResults)
             "action": {
               "type": "uri",
               "label": "Open Map",
-              "uri": "https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+""
+              "uri": encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"")
             },
             "height": "sm",
             "style": "link"
