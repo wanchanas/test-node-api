@@ -195,7 +195,7 @@ function reply(reply_token, msg) {
 
     let body = JSON.stringify({
         replyToken: reply_token,
-        messages: msg
+        messages: JSON.parse(JSON.stringify(msg))
     })
 
     request.post({
@@ -226,7 +226,7 @@ function initReplyMessage(placeResults)
     var total = 1;
     for(var place in placeResults){
      
-        if(total > 2)
+        if(total > 5)
         {
             break;
         }
@@ -357,5 +357,6 @@ function initReplyMessage(placeResults)
           total++;
     }
 
+    console.log(replyMessage);
     return JSON.parse(JSON.stringify(replyMessage));
 }
