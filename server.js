@@ -186,7 +186,7 @@ app.listen(port, () => {
 
 function reply(reply_token, msg) {
 
-    logs.push(JSON.parse(JSON.stringify({"log": moment().add(7, 'hours').format('Y-M-D H:m:s') + ': answer = ' + msg})))
+    logs.push(JSON.parse(JSON.stringify({"log": moment().add(7, 'hours').format('Y-M-D H:m:s') + ': answer = ' + JSON.stringify(msg)})))
 
     let headers = {
         'Content-Type': 'application/json',
@@ -226,7 +226,7 @@ function initReplyMessage(placeResults)
     var total = 1;
     for(var place in placeResults){
      
-        if(total > 10)
+        if(total > 2)
         {
             break;
         }
