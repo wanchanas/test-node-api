@@ -3,6 +3,8 @@ const app = express()
 const bodyParser = require('body-parser')
 const request = require('request')
 const logs = require('./log')
+const modelsContents = require('./models/content_message')
+
 var moment = require('moment');
 
 app.use(bodyParser.json())
@@ -17,7 +19,7 @@ places.apiKey = "AIzaSyD7Gx9KOZ5p-NANXqNbid4WqR1g1X18flE"; //for heroku
 places.debug = false; // boolean;
 
 app.get('/', (req, res) => {
-    res.status(200).send("SCG")
+    res.status(200).send("Hello")
 })
 
 app.get('/xyz', (req, res) => {
@@ -118,7 +120,6 @@ app.get('/restaurant/bangsue', (req, res) => {
 
             // result object
             resultJson = JSON.parse(JSON.stringify(result));
-            
             res.status(200).json(resultJson)
         })
         .catch(e => {
@@ -139,6 +140,7 @@ app.post('/webhook', (req, res) => {
 
     var resultJson = {}
 
+    
     places.nearbysearch({
         location: "13.828025,100.528100", // LatLon delimited by,
         radius: "3000",  // Radius cannot be used if rankBy set to DISTANCE
@@ -154,6 +156,7 @@ app.post('/webhook', (req, res) => {
                 return parseFloat(b.rating) - parseFloat(a.rating);
             });
 
+            /*
             var answer = ""
             for(var place in resultJson){
 
@@ -162,6 +165,10 @@ app.post('/webhook', (req, res) => {
             }
 
             reply(reply_token, answer)
+            */
+
+           var jsonReply = initReplyMessage(resultJson);
+           reply(reply_token, jsonReply)
 
         })
         .catch(e => {
@@ -188,10 +195,7 @@ function reply(reply_token, msg) {
 
     let body = JSON.stringify({
         replyToken: reply_token,
-        messages: [{
-            type: 'text',
-            text: msg
-        }]
+        messages: msg
     })
 
     request.post({
@@ -205,4 +209,153 @@ function reply(reply_token, msg) {
 
         console.log('status = ' + res.statusCode);
     });
+}
+
+function initReplyMessage(placeResults)
+{
+    var maxwidth = 1024;
+    var replyMessage = {
+        type: 'flex',
+        altText: 'Flex Message',
+        contents: {
+          type: 'carousel',
+          contents: []
+        }
+      }
+    
+    var total = 1;
+    for(var place in placeResults){
+     
+        if(total > 10)
+        {
+            break;
+        }
+
+        var content = modelsContents;
+    
+        content.body.contents.push({
+                "type": "text",
+                "text": placeResults[place].name,
+                "size": "xl",
+                "weight": "bold"
+            });
+
+        if(placeResults[place].photos != null && placeResults[place].photos.length > 0)
+        {
+            var photo = "https://maps.googleapis.com/maps/api/place/photo?maxwidth="+maxwidth+"&photoreference="+placeResults[place].photos[0].photo_reference+"&key="+places.apiKey
+            content.hero.url = photo;
+        }
+
+        content.hero.action.label = ""
+        content.hero.action.uri = "https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"";
+        
+        //Rating
+        var rating = {
+            "type": "box",
+            "layout": "baseline",
+            "margin": "md",
+            "contents": []
+        };
+        var rate = parseInt(placeResults[place].rating, 10);
+        for(var i=0; i < rate; i++ )
+        {
+            rating.contents.push({
+                "type": "icon",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                "size": "sm"
+              });
+        }
+
+        for(var i=0; i < (5-rate); i++ )
+        {
+            rating.contents.push({
+                "type": "icon",
+                "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
+                "size": "sm"
+              });
+        }
+        rating.contents.push({
+            "type": "text",
+            "text": "4.0",
+            "flex": 0,
+            "margin": "md",
+            "size": "sm",
+            "color": "#999999"
+        });
+
+        content.body.contents.push(rating);
+
+        var box =  {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "margin": "lg",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Place",
+                    "flex": 1,
+                    "size": "sm",
+                    "color": "#AAAAAA"
+                  },
+                  {
+                    "type": "text",
+                    "text": placeResults[place].vicinity,
+                    "flex": 5,
+                    "size": "sm",
+                    "color": "#666666",
+                    "wrap": true
+                  }
+                ]
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "spacing": "sm",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "Open",
+                    "flex": 1,
+                    "size": "sm",
+                    "color": "#AAAAAA"
+                  },
+                  {
+                    "type": "text",
+                    "text": (placeResults[place].opening_hours != null && placeResults[place].opening_hours.open_now == true) ? "Open Now" : "Closed",
+                    "flex": 5,
+                    "size": "sm",
+                    "color": "#666666",
+                    "wrap": true
+                  }
+                ]
+              }
+            ]
+          };
+
+          content.body.contents.push(box);
+
+          var footer = {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "Open Map",
+              "uri": "https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+""
+            },
+            "height": "sm",
+            "style": "link"
+          };
+          content.footer.contents.push(footer);
+
+          //Add to reply message
+          replyMessage.contents.contents.push(content);
+          total++;
+    }
+
+    return JSON.parse(JSON.stringify(replyMessage));
 }
