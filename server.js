@@ -226,7 +226,7 @@ function initReplyMessage(placeResults)
     var total = 1;
     for(var place in placeResults){
      
-        if(total > 5)
+        if(total > 1)
         {
             break;
         }
