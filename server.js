@@ -186,8 +186,6 @@ app.listen(port, () => {
 
 function reply(reply_token, msg) {
 
-    logs.push(JSON.parse(JSON.stringify({"log": moment().add(7, 'hours').format('Y-M-D H:m:s') + ': answer = ' + JSON.stringify(msg)})))
-
     let headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer rx+8yxCgh0eqm1yRd+SV+KJZiIImGqimXj4ybTTnxuOSwGSGXIK8y08PKo5lDh80ns6NG99eU91CDEVNjCcl0Sd9rLE9edz0x2Odtk1i9AtvdS5TksLYf3wfBCD73l36GhoGC4QYDk0iTiT6yotXRgdB04t89/1O/w1cDnyilFU='
@@ -197,6 +195,8 @@ function reply(reply_token, msg) {
         replyToken: reply_token,
         messages: [msg]
     })
+
+    logs.push({"log":JSON.parse(body)})
 
     request.post({
         url: 'https://api.line.me/v2/bot/message/reply',
