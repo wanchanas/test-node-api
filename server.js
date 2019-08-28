@@ -249,7 +249,7 @@ function initReplyMessage(placeResults)
 
         content.hero.action.label = ""
         content.hero.action.uri = encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"");
-        
+        content.hero.action.uri = "https://www.google.co.th";
         //Rating
         var rating = {
             "type": "box",
@@ -346,7 +346,7 @@ function initReplyMessage(placeResults)
             "action": {
               "type": "uri",
               "label": "Open Map",
-              "uri": encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"")
+              "uri": "https://www.google.co.th" //encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"")
             },
             "height": "sm",
             "style": "link"
