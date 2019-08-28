@@ -195,7 +195,7 @@ function reply(reply_token, msg) {
 
     let body = JSON.stringify({
         replyToken: reply_token,
-        messages: [JSON.parse(JSON.stringify(msg))]
+        messages: [msg]
     })
 
     request.post({
