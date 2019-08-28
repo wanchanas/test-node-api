@@ -164,10 +164,10 @@ app.post('/webhook', (req, res) => {
                 answer += resultJson[place].vicinity + "\n"
             }
 
-            reply(reply_token, answer)
+            //reply(reply_token, answer)
 
-           //var jsonReply = initReplyMessage(resultJson);
-           //reply(reply_token, jsonReply)
+            var jsonReply = initReplyMessage(resultJson);
+            reply(reply_token, jsonReply)
 
         })
         .catch(e => {
@@ -201,7 +201,7 @@ function reply(reply_token, msg) {
     logs.push({"log":JSON.parse(body)})
 
     request.post({
-        url: 'https://api.line.me/v2/bot/message/reply',
+        url: 'https://api.line.me/v2/bot/message/push',
         headers: headers,
         body: body
     }, (err, res, body) => {
