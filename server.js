@@ -156,7 +156,7 @@ app.post('/webhook', (req, res) => {
                 return parseFloat(b.rating) - parseFloat(a.rating);
             });
 
-            /*
+            
             var answer = ""
             for(var place in resultJson){
 
@@ -165,10 +165,9 @@ app.post('/webhook', (req, res) => {
             }
 
             reply(reply_token, answer)
-            */
 
-           var jsonReply = initReplyMessage(resultJson);
-           reply(reply_token, jsonReply)
+           //var jsonReply = initReplyMessage(resultJson);
+           //reply(reply_token, jsonReply)
 
         })
         .catch(e => {
@@ -193,7 +192,10 @@ function reply(reply_token, msg) {
 
     let body = JSON.stringify({
         replyToken: reply_token,
-        messages: [msg]
+        messages: [{
+            type: 'text',
+            text: msg
+        }]
     })
 
     logs.push({"log":JSON.parse(body)})
@@ -277,7 +279,7 @@ function initReplyMessage(placeResults)
         }
         rating.contents.push({
             "type": "text",
-            "text": "4.0",
+            "text": placeResults[place].rating,
             "flex": 0,
             "margin": "md",
             "size": "sm",
