@@ -234,8 +234,9 @@ function initReplyMessage(placeResults)
         content.body.contents.push({
                 "type": "text",
                 "text": placeResults[place].name,
-                "size": "xl",
-                "weight": "bold"
+                "size": "md",
+                "weight": "bold",
+                "wrap": true
             });
 
         var photo = "https://static.bkkmenu.com/files/2018/02/Crostini-9-1005x670.jpg";
@@ -247,7 +248,7 @@ function initReplyMessage(placeResults)
         content.hero.url = photo;
         content.hero.action.label = placeResults[place].name
         content.hero.action.uri = encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"");
-        content.hero.action.uri = "https://www.google.co.th";
+
         //Rating
         var rating = {
             "type": "box",
@@ -344,7 +345,7 @@ function initReplyMessage(placeResults)
             "action": {
               "type": "uri",
               "label": "Open Map",
-              "uri": "https://www.google.co.th" //encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"")
+              "uri": encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"")
             },
             "height": "sm",
             "style": "link"
