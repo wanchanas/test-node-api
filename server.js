@@ -203,7 +203,7 @@ function reply(reply_token, msg) {
         body: body
     }, (err, res, body) => {
         
-        var log = {"log": moment().add(7, 'hours').format('Y-M-D H:m:s')+': status = ' + res.statusCode + ":" + JSON.stringify(body)+ ":" + JSON.stringify(res)}
+        var log = {"log": moment().add(7, 'hours').format('Y-M-D H:m:s')+': status = ' + res.statusCode + ":" + JSON.stringify(body)}
         logs.push(JSON.parse(JSON.stringify(log)))
 
     });
@@ -304,7 +304,7 @@ function initReplyMessage(placeResults)
                   },
                   {
                     "type": "text",
-                    "text": placeResults[place].vicinity,
+                    "text": String(placeResults[place].vicinity),
                     "flex": 5,
                     "size": "sm",
                     "color": "#666666",
