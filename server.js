@@ -231,7 +231,7 @@ function initReplyMessage(placeResults)
 
         var content = {};
 
-        contetn = JSON.parse(modelsContents);
+        contetn = modelsContents;
         content.body.contents.push({
                 "type": "text",
                 "text": placeResults[place].name,
