@@ -140,7 +140,6 @@ app.post('/webhook', (req, res) => {
 
     var resultJson = {}
 
- /*   
     places.nearbysearch({
         location: "13.828025,100.528100", // LatLon delimited by,
         radius: "3000",  // Radius cannot be used if rankBy set to DISTANCE
@@ -156,7 +155,7 @@ app.post('/webhook', (req, res) => {
                 return parseFloat(b.rating) - parseFloat(a.rating);
             });
 
-            
+            /*
             var answer = ""
             for(var place in resultJson){
 
@@ -165,7 +164,7 @@ app.post('/webhook', (req, res) => {
             }
 
             reply(reply_token, answer)
-            
+            */
 
             var jsonReply = initReplyMessage(resultJson);
             reply(reply_token, jsonReply);
@@ -175,7 +174,7 @@ app.post('/webhook', (req, res) => {
             reply(reply_token, String(e))
             console.log(e)
         });
-    */
+
     res.sendStatus(200)
 })
 
@@ -207,10 +206,10 @@ function reply(reply_token, msg) {
         body: body
     }, (err, res, body) => {
         
-        var log = {"log": moment().add(7, 'hours').format('Y-M-D H:m:s')+': status = ' + res.statusCode}
+        var response = JSON.parse(body);
+        var log = {"log": moment().add(7, 'hours').format('Y-M-D H:m:s')+': status = ' + res.statusCode + ":" + response.message.text}
         logs.push(JSON.parse(JSON.stringify(log)))
-
-        console.log('status = ' + res.statusCode);
+        
     });
 }
 
