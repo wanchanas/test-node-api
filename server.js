@@ -222,6 +222,7 @@ function initReplyMessage(placeResults)
       }
     
     var total = 1;
+    var content = {};
     for(var place in placeResults){
      
         if(total > 5)
@@ -229,9 +230,7 @@ function initReplyMessage(placeResults)
             break;
         }
 
-        var content = {};
-
-        contetn = modelsContents;
+        contetn = JSON.parse(JSON.stringify(modelsContents));
         content.body.contents.push({
                 "type": "text",
                 "text": placeResults[place].name,
