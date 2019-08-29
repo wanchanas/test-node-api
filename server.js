@@ -229,8 +229,9 @@ function initReplyMessage(placeResults)
             break;
         }
 
-        var content = modelsContents;
-    
+        var content = {};
+
+        contetn = JSON.parse(modelsContents);
         content.body.contents.push({
                 "type": "text",
                 "text": placeResults[place].name,
@@ -265,7 +266,6 @@ function initReplyMessage(placeResults)
                 "size": "sm"
               });
         }
-
         for(var i=0; i < (5-rate); i++ )
         {
             rating.contents.push({
