@@ -230,7 +230,7 @@ function initReplyMessage(placeResults)
             break;
         }
 
-        contetn = JSON.parse(JSON.stringify(modelsContents));
+        content = JSON.parse(JSON.stringify(modelsContents));
         content.body.contents.push({
                 "type": "text",
                 "text": placeResults[place].name,
