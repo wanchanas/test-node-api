@@ -155,17 +155,6 @@ app.post('/webhook', (req, res) => {
                 return parseFloat(b.rating) - parseFloat(a.rating);
             });
 
-            /*
-            var answer = ""
-            for(var place in resultJson){
-
-                answer += String(parseInt(place)+1) +". " +resultJson[place].name + " (" + resultJson[place].rating+ "*) "
-                answer += resultJson[place].vicinity + "\n"
-            }
-
-            reply(reply_token, answer)
-            */
-
             var jsonReply = initReplyMessage(resultJson);
             reply(reply_token, jsonReply);
 
