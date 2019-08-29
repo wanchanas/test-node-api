@@ -275,7 +275,7 @@ function initReplyMessage(placeResults)
         }
         rating.contents.push({
             "type": "text",
-            "text": placeResults[place].rating,
+            "text": String(placeResults[place].rating),
             "flex": 0,
             "margin": "md",
             "size": "sm",
