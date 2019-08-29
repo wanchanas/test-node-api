@@ -245,7 +245,7 @@ function initReplyMessage(placeResults)
         }
 
         content.hero.url = photo;
-        content.hero.action.label = laceResults[place].name
+        content.hero.action.label = placeResults[place].name
         content.hero.action.uri = encodeURI("https://www.google.com/maps/dir/Current+Location/"+placeResults[place].geometry.location.lat+","+placeResults[place].geometry.location.lng+"");
         content.hero.action.uri = "https://www.google.co.th";
         //Rating
